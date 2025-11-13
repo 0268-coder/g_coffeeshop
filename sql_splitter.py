@@ -112,7 +112,7 @@ def split_sql_file(input_filepath):
 
 if __name__ == '__main__':
     # Set the default input file name
-    default_input_file = "g_coffeeshop_newest.sql"
+    default_input_file = "g_coffeeshop_main_branch.sql"
     
     # Check if a file path was provided as a command-line argument
     if len(sys.argv) > 1:
