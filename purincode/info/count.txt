@@ -1,5 +1,0 @@
-payment_method_id 1: 4097 transactions
-payment_method_id 2: 4008 transactions
-payment_method_id 3: 3988 transactions
-payment_method_id 4: 3962 transactions
-payment_method_id 5: 3982 transactions
