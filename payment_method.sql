@@ -4,9 +4,8 @@ CREATE TABLE `payment_method` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `payment_method` (`payment_method_id`, `payment_method_name`) VALUES
-(4, 'cash'),
+(1, 'giftcard'),
 (2, 'credit_card'),
 (3, 'debit_card'),
-(1, 'giftcard'),
+(4, 'cash'),
 (5, 'promptpay');
-
