@@ -42,6 +42,37 @@ GIFTCARD_TITLES = [
     "Gold Card"
 ]
 
+# Common Thai first names for purchasers
+PURCHASER_NAMES = [
+    "Somchai", "Somporn", "Somrat", "Somkid", "Somyot", "Somkuan",
+    "Saowapon", "Saowanee", "Saralee", "Sarita", "Sakura", "Salinee",
+    "Ananda", "Anupong", "Anucha", "Anucha", "Anurag",
+    "Boonmee", "Boonsri", "Boonlert", "Boonprom",
+    "Chalit", "Chalermchai", "Chatchai", "Chamnan", "Chanchai", "Chana",
+    "Daeng", "Darunee", "Dapeng",
+    "Ekapol", "Ekatip",
+    "Faisal", "Farina",
+    "Guntita", "Gunawan",
+    "Hari", "Harinee", "Harin",
+    "Issara", "Ittipol",
+    "Jenjira", "Jetsada", "Jirat", "Jitchai",
+    "Kaew", "Kamon", "Kanok", "Kannika", "Kasen", "Kasem",
+    "Lada", "Ladda", "Laksana", "Lam", "Lampang",
+    "Maitri", "Manop", "Manun", "Mathurin",
+    "Nalin", "Narin", "Naruebet", "Nida", "Niran",
+    "Orapim", "Orapin",
+    "Phaiwan", "Phakorn", "Phalgun", "Phanita", "Phanu", "Phatara",
+    "Raksasa", "Raksit", "Rambhai", "Ramin", "Rana", "Ranjit",
+    "Saiyai", "Saiwarin", "Sajja", "Sakda", "Saksit", "Salang",
+    "Tada", "Tanapong", "Tanatip", "Tanakorn", "Tanawat", "Tanjit",
+    "Udorn", "Udomsak", "Umaporn",
+    "Varun", "Vasu", "Vichien",
+    "Wachai", "Wachira", "Wachirawan", "Wajira", "Warissara", "Wasan",
+    "Xanai", "Xara",
+    "Yaowalak", "Yasinthorn", "Yeddet",
+    "Zabir", "Zahir", "Zainee"
+]
+
 # ==============================================================
 # HELPER FUNCTIONS
 # ==============================================================
@@ -148,8 +179,8 @@ for transaction in giftcard_source:
     # Random title
     title = random.choice(GIFTCARD_TITLES)
     
-    # Purchased by member: 70% have a member ID, 30% NULL (gift from non-member)
-    purchased_by_member_id = random.randint(1, 50000) if random.random() < 0.7 else None
+    # Purchase by name: 70% have a purchaser name, 30% NULL (anonymous gift)
+    purchase_by_name = random.choice(PURCHASER_NAMES) if random.random() < 0.7 else None
     
     # Last used date (only if status is Used or if partially used)
     if status == "Used" or (status == "Active" and current_balance < initial_value):
@@ -170,7 +201,7 @@ for transaction in giftcard_source:
         'expiry_date': expiry_date,
         'status': status,
         'code': code,
-        'purchased_by_member_id': purchased_by_member_id,
+        'purchase_by_name': purchase_by_name,
         'last_used_date': last_used_date
     })
     giftcard_id += 1
@@ -179,7 +210,7 @@ for transaction in giftcard_source:
 # STEP 3: Save to CSV
 # ==============================================================
 with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=['payment_method_id', 'giftcard_id', 'initial_value', 'current_balance', 'title', 'issued_date', 'expiry_date', 'status', 'code', 'purchased_by_member_id', 'last_used_date'])
+    writer = csv.DictWriter(f, fieldnames=['payment_method_id', 'giftcard_id', 'initial_value', 'current_balance', 'title', 'issued_date', 'expiry_date', 'status', 'code', 'purchase_by_name', 'last_used_date'])
     writer.writeheader()
     writer.writerows(rows)
 
@@ -189,7 +220,7 @@ print(f"✓ Saved to '{OUTPUT_CSV}'")
 # STEP 4: Generate SQL INSERT statements
 # ==============================================================
 with open(OUTPUT_SQL, "w", encoding="utf-8") as file:
-    file.write("INSERT INTO `gift_card` (`payment_method_id`, `giftcard_id`, `initial_value`, `current_balance`, `title`, `issued_date`, `expiry_date`, `status`, `code`, `purchased_by_member_id`, `last_used_date`) VALUES\n")
+    file.write("INSERT INTO `gift_card` (`payment_method_id`, `giftcard_id`, `initial_value`, `current_balance`, `title`, `issued_date`, `expiry_date`, `status`, `code`, `purchase_by_name`, `last_used_date`) VALUES\n")
     
     for idx, row in enumerate(rows):
         pm_id = row['payment_method_id']
@@ -201,14 +232,14 @@ with open(OUTPUT_SQL, "w", encoding="utf-8") as file:
         expiry = row['expiry_date']
         status = row['status']
         code = row['code']
-        member_id = row['purchased_by_member_id']
+        purchaser_name = row['purchase_by_name']
         last_used = row['last_used_date']
         
         # Handle NULL values
-        member_id_str = f"{member_id}" if member_id is not None else "NULL"
+        purchaser_name_str = f"'{purchaser_name}'" if purchaser_name is not None else "NULL"
         last_used_str = f"'{last_used}'" if last_used is not None else "NULL"
         
-        values = f"({pm_id}, {gc_id}, {init_val}, {curr_bal}, '{title}', '{issued}', '{expiry}', '{status}', '{code}', {member_id_str}, {last_used_str})"
+        values = f"({pm_id}, {gc_id}, {init_val}, {curr_bal}, '{title}', '{issued}', '{expiry}', '{status}', '{code}', {purchaser_name_str}, {last_used_str})"
         
         if idx < len(rows) - 1:
             file.write(values + ",\n")
