@@ -117,7 +117,7 @@ CREATE TABLE `delivery_address` (
   `sub_district` varchar(100) NOT NULL,
   `district` varchar(100) NOT NULL,
   `province` varchar(100) NOT NULL,
-  `postal_code` varchar(10) NOT NULL
+  `postal_code` char(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -40835,6 +40835,9 @@ ALTER TABLE `restock`
   ADD CONSTRAINT `fk_re_inv` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`inventory_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_re_sup` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`) ON UPDATE CASCADE;
 COMMIT;
+
+ALTER TABLE `payment_transaction`
+  ADD PRIMARY KEY `transaction_id`;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
