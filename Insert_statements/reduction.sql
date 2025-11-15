@@ -1,8 +1,3 @@
-CREATE TABLE `reduction` (
-  `inventory_id` int(11) NOT NULL,
-  `transaction_id` char(36) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 INSERT INTO `reduction` (`inventory_id`, `transaction_id`) VALUES
 (494, '7466d38e-f849-43b4-b256-7d6054cd3617'),
 (494, '2ff0b54b-4f87-42b6-8c66-d4dbf21636a5'),
