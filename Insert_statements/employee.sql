@@ -1,12 +1,3 @@
-CREATE TABLE `employee` (
-  `employee_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `position` varchar(60) NOT NULL,
-  `hire_date` date NOT NULL,
-  `salary` decimal(12,2) NOT NULL,
-  --new data
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --data add(peppo)
 INSERT INTO `employee` (`employee_id`, `name`, `position`, `hire_date`, `salary`) VALUES
 (1, 'Somsak Chai', 'Manager', '2022-05-15', 35000.00),

@@ -17,9 +17,10 @@ from datetime import datetime
 # ==============================================================
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PURIN_CODE_DIR = os.path.dirname(SCRIPT_DIR)
+MAIN_DIR = os.path.dirname(PURIN_CODE_DIR)
 
-INSERT_SQL_DIR = os.path.join(PURIN_CODE_DIR, "insert sql")
-OUTPUT_FILE = os.path.join(INSERT_SQL_DIR, "consolidated_inserts.sql")
+INSERT_SQL_DIR = os.path.join(MAIN_DIR, "insert_statements")
+OUTPUT_FILE = os.path.join(INSERT_SQL_DIR, "purin_consolidated_inserts.sql")
 
 # Order of payment methods for logical organization
 PAYMENT_METHODS = [
@@ -44,23 +45,6 @@ consolidated_content = []
 total_inserts = 0
 file_count = 0
 
-# Add header comment
-header = f"""-- ================================================================
--- CONSOLIDATED SQL INSERT STATEMENTS
--- Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
--- ================================================================
--- This file contains all payment method data in the following order:
---   1. Gift Card (payment_method_id = 1)
---   2. Credit Card (payment_method_id = 2)
---   3. Debit Card (payment_method_id = 3)
---   4. Cash (payment_method_id = 4)
---   5. PromptPay (payment_method_id = 5)
--- ================================================================
-
-"""
-
-consolidated_content.append(header)
-
 print("Processing SQL files:")
 print("-" * 70)
 
@@ -80,14 +64,6 @@ for filename, method_id, description in PAYMENT_METHODS:
         total_inserts += insert_count
         file_count += 1
         
-        # Add section header
-        section_header = f"\n-- ================================================================\n"
-        section_header += f"-- Payment Method {method_id}: {description}\n"
-        section_header += f"-- File: {filename}\n"
-        section_header += f"-- Records: {insert_count:,}\n"
-        section_header += f"-- ================================================================\n\n"
-        
-        consolidated_content.append(section_header)
         consolidated_content.append(content)
         
         # Add separator between sections (except for last section)
@@ -100,18 +76,6 @@ for filename, method_id, description in PAYMENT_METHODS:
         print(f"[ERROR] {description:<20} - {str(e)}")
 
 print("-" * 70)
-
-# Add footer comment
-footer = f"""
-
--- ================================================================
--- END OF CONSOLIDATED INSERT STATEMENTS
--- Total Records: {total_inserts:,}
--- Total Files Consolidated: {file_count}
--- ================================================================
-"""
-
-consolidated_content.append(footer)
 
 # Write consolidated file
 try:
