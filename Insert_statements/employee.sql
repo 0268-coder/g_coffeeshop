@@ -1,4 +1,3 @@
---data add(peppo)
 INSERT INTO `employee` (`employee_id`, `name`, `position`, `hire_date`, `salary`) VALUES
 (1, 'Somsak Chai', 'Manager', '2022-05-15', 35000.00),
 (2, 'Naree Kitja', 'Barista', '2023-01-20', 18000.00),

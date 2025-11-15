@@ -1,4 +1,3 @@
--- DELIVERY TRANSACTION
 INSERT INTO delivery_transaction (delivery_id, delivery_time, transaction_id) VALUES
 (1, '2025-06-01 03:47:47', '002109e3-da6e-499e-a046-abc286e41fc7'),
 (2, '2025-06-01 03:10:40', '817e653b-9df1-4aff-9b89-f70db31c62fd'),

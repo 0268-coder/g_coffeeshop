@@ -1,4 +1,3 @@
--- Inventory Transactions with movement_id from 1 and quantity 3-20
 INSERT INTO `inventory_transaction` (`movement_id`, `quantity`, `type`, `date`, `transaction_id`, `supplier_id`) VALUES
 (1, 4, 'IN', '2025-07-22', 'edeba44f-8c44-4b07-be45-9eb612ba60f3', 7),
 (2, 19, 'OUT', '2025-12-14', '041721cc-57d0-49fe-a184-791f94040410', 4),
