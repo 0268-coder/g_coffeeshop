@@ -12,7 +12,7 @@
 -- 5. Creates views for decrypted data access
 -- ============================================================================
 
--- Set encryption key (CHANGE THIS IN PRODUCTION!)
+-- Set encryption key
 SET @encryption_key = 'i6yPwy3Rcd2zD1eU';
 
 -- ============================================================================
@@ -51,6 +51,7 @@ ALTER TABLE `employee`
 -- ============================================================================
 -- SECTION 2: ENCRYPT EXISTING DATA
 -- ============================================================================
+
 
 -- Encrypt credit table data
 UPDATE `credit` 
@@ -262,31 +263,53 @@ END$$
 DELIMITER ;
 
 -- ============================================================================
--- SECTION 5: CREATE DECRYPTED VIEWS
+-- SECTION 5: CREATE DECRYPTION FUNCTION
+-- ============================================================================
+-- Note: MySQL views cannot contain variables, so we create a function
+-- that uses a hardcoded key. In production, consider using MySQL's
+-- keyring plugin or external key management.
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS `decrypt_data`$$
+CREATE FUNCTION `decrypt_data`(encrypted_data VARBINARY(256))
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+  -- IMPORTANT: Change this key to match your encryption key
+  DECLARE decryption_key VARCHAR(255) DEFAULT 'i6yPwy3Rcd2zD1eU';
+  RETURN CAST(AES_DECRYPT(encrypted_data, decryption_key) AS CHAR);
+END$$
+DELIMITER ;
+
+-- ============================================================================
+-- SECTION 6: CREATE DECRYPTED VIEWS
 -- ============================================================================
 
 -- Credit table decrypted view
-CREATE OR REPLACE VIEW `v_credit_decrypted` AS
+DROP VIEW IF EXISTS `vw_credit_decrypted`;
+CREATE VIEW `vw_credit_decrypted` AS
 SELECT 
   `payment_method_id`,
   `credit_id`,
-  CAST(AES_DECRYPT(`last4digit`, @encryption_key) AS CHAR) AS `last4digit`,
-  CAST(AES_DECRYPT(`fname`, @encryption_key) AS CHAR) AS `fname`,
-  CAST(AES_DECRYPT(`lname`, @encryption_key) AS CHAR) AS `lname`
+  decrypt_data(`last4digit`) AS `last4digit`,
+  decrypt_data(`fname`) AS `fname`,
+  decrypt_data(`lname`) AS `lname`
 FROM `credit`;
 
 -- Debit table decrypted view
-CREATE OR REPLACE VIEW `v_debit_decrypted` AS
+DROP VIEW IF EXISTS `vw_debit_decrypted`;
+CREATE VIEW `vw_debit_decrypted` AS
 SELECT 
   `payment_method_id`,
   `debit_id`,
-  CAST(AES_DECRYPT(`last4digit`, @encryption_key) AS CHAR) AS `last4digit`,
-  CAST(AES_DECRYPT(`fname`, @encryption_key) AS CHAR) AS `fname`,
-  CAST(AES_DECRYPT(`lname`, @encryption_key) AS CHAR) AS `lname`
+  decrypt_data(`last4digit`) AS `last4digit`,
+  decrypt_data(`fname`) AS `fname`,
+  decrypt_data(`lname`) AS `lname`
 FROM `debit`;
 
 -- Gift card table decrypted view
-CREATE OR REPLACE VIEW `v_gift_card_decrypted` AS
+DROP VIEW IF EXISTS `vw_gift_card_decrypted`;
+CREATE VIEW `vw_gift_card_decrypted` AS
 SELECT 
   `payment_method_id`,
   `giftcard_id`,
@@ -296,47 +319,50 @@ SELECT
   `issued_date`,
   `expiry_date`,
   `status`,
-  CAST(AES_DECRYPT(`code`, @encryption_key) AS CHAR) AS `code`,
+  decrypt_data(`code`) AS `code`,
   CASE 
     WHEN `purchased_by_name` IS NOT NULL 
-    THEN CAST(AES_DECRYPT(`purchased_by_name`, @encryption_key) AS CHAR)
+    THEN decrypt_data(`purchased_by_name`)
     ELSE NULL
   END AS `purchased_by_name`,
   `last_used_date`
 FROM `gift_card`;
 
 -- Delivery address table decrypted view
-CREATE OR REPLACE VIEW `v_delivery_address_decrypted` AS
+DROP VIEW IF EXISTS `vw_delivery_address_decrypted`;
+CREATE VIEW `vw_delivery_address_decrypted` AS
 SELECT 
   `delivery_address_id`,
   `delivery_id`,
-  CAST(AES_DECRYPT(`street`, @encryption_key) AS CHAR) AS `street`,
-  CAST(AES_DECRYPT(`sub_district`, @encryption_key) AS CHAR) AS `sub_district`,
-  CAST(AES_DECRYPT(`district`, @encryption_key) AS CHAR) AS `district`,
-  CAST(AES_DECRYPT(`province`, @encryption_key) AS CHAR) AS `province`,
-  CAST(AES_DECRYPT(`postal_code`, @encryption_key) AS CHAR) AS `postal_code`
+  decrypt_data(`street`) AS `street`,
+  decrypt_data(`sub_district`) AS `sub_district`,
+  decrypt_data(`district`) AS `district`,
+  decrypt_data(`province`) AS `province`,
+  decrypt_data(`postal_code`) AS `postal_code`
 FROM `delivery_address`;
 
 -- Employee table decrypted view
-CREATE OR REPLACE VIEW `v_employee_decrypted` AS
+DROP VIEW IF EXISTS `vw_employee_decrypted`;
+CREATE VIEW `vw_employee_decrypted` AS
 SELECT 
   `employee_id`,
   `name`,
   `position`,
   `hire_date`,
-  CAST(AES_DECRYPT(`salary`, @encryption_key) AS DECIMAL(12,2)) AS `salary`
+  CAST(decrypt_data(`salary`) AS DECIMAL(12,2)) AS `salary`
 FROM `employee`;
 
 -- ============================================================================
--- SECTION 6: GRANT PERMISSIONS (OPTIONAL - ADJUST AS NEEDED)
+-- SECTION 7: GRANT PERMISSIONS (OPTIONAL - ADJUST AS NEEDED)
 -- ============================================================================
 
 -- Example: Grant SELECT on decrypted views to authorized users only
--- GRANT SELECT ON `v_credit_decrypted` TO 'admin_user'@'localhost';
--- GRANT SELECT ON `v_debit_decrypted` TO 'admin_user'@'localhost';
--- GRANT SELECT ON `v_gift_card_decrypted` TO 'admin_user'@'localhost';
--- GRANT SELECT ON `v_delivery_address_decrypted` TO 'admin_user'@'localhost';
--- GRANT SELECT ON `v_employee_decrypted` TO 'hr_user'@'localhost';
+-- GRANT SELECT ON `vw_credit_decrypted` TO 'admin_user'@'localhost';
+-- GRANT SELECT ON `vw_debit_decrypted` TO 'admin_user'@'localhost';
+-- GRANT SELECT ON `vw_gift_card_decrypted` TO 'admin_user'@'localhost';
+-- GRANT SELECT ON `vw_delivery_address_decrypted` TO 'admin_user'@'localhost';
+-- GRANT SELECT ON `vw_employee_decrypted` TO 'hr_user'@'localhost';
+-- GRANT EXECUTE ON FUNCTION `decrypt_data` TO 'admin_user'@'localhost';
 
 -- ============================================================================
 -- ENCRYPTION IMPLEMENTATION COMPLETED
@@ -344,23 +370,31 @@ FROM `employee`;
 -- 
 -- USAGE NOTES:
 -- 
--- 1. SECURITY: Change @encryption_key to a strong, unique key in production
---    Store the key securely (e.g., in environment variables or key vault)
+-- 1. SECURITY: The encryption key is stored in TWO places - update BOTH:
+--    - Line 17: SET @encryption_key (for initial data encryption & triggers)
+--    - decrypt_data function: decryption_key variable (for views)
+--    Both MUST match! In production, use MySQL keyring or external key mgmt.
 -- 
 -- 2. INSERTING DATA: Insert plain text data - triggers will auto-encrypt
 --    Example: INSERT INTO credit VALUES (1, 1, '1234', 'John', 'Doe');
 -- 
 -- 3. VIEWING DECRYPTED DATA: Query the views instead of base tables
---    Example: SELECT * FROM v_credit_decrypted;
+--    Example: SELECT * FROM vw_credit_decrypted;
 -- 
 -- 4. UPDATING DATA: Update with plain text - triggers will auto-encrypt
 --    Example: UPDATE credit SET fname = 'Jane' WHERE credit_id = 1;
 -- 
--- 5. BACKUP: Ensure encryption key is backed up separately from database
+-- 5. DIRECT DECRYPTION: You can also use the decrypt_data function directly
+--    Example: SELECT payment_method_id, decrypt_data(fname) FROM credit;
 -- 
--- 6. PERFORMANCE: Encryption/decryption adds overhead - monitor queries
+-- 6. BACKUP: Ensure encryption key is backed up separately from database
 -- 
--- 7. KEY ROTATION: To rotate keys, decrypt all data with old key and
---    re-encrypt with new key using similar UPDATE statements
+-- 7. PERFORMANCE: Encryption/decryption adds overhead - monitor queries
+--    Consider indexing on encrypted columns if searching is needed
+-- 
+-- 8. KEY ROTATION: To rotate keys:
+--    a) Update @encryption_key and decrypt_data function with new key
+--    b) Decrypt all data with old key and re-encrypt with new key
+--    c) Drop and recreate triggers with new key reference
 -- 
 -- ============================================================================
