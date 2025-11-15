@@ -22,6 +22,7 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
+SET FOREIGN_KEY_CHECKS = 0;
 
 --
 -- Table structure for table `cash`
@@ -131281,7 +131282,7 @@ ALTER TABLE `restock`
   ADD CONSTRAINT `fk_re_inv` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`inventory_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_re_sup` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`) ON UPDATE CASCADE;
 COMMIT;
-
+SET FOREIGN_KEY_CHECKS = 1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
