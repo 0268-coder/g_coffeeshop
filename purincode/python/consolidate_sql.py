@@ -19,8 +19,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PURIN_CODE_DIR = os.path.dirname(SCRIPT_DIR)
 MAIN_DIR = os.path.dirname(PURIN_CODE_DIR)
 
-INSERT_SQL_DIR = os.path.join(MAIN_DIR, "insert_statements")
-OUTPUT_FILE = os.path.join(INSERT_SQL_DIR, "purin_consolidated_inserts.sql")
+INSERT_SQL_DIR = os.path.join(MAIN_DIR, "purincode", "insert sql")
+OUTPUT_FILE = os.path.join(MAIN_DIR, "insert_statements", "purin_consolidated_inserts.sql")
 
 # Order of payment methods for logical organization
 PAYMENT_METHODS = [
