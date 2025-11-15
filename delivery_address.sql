@@ -8,3 +8,4 @@ CREATE TABLE `delivery_address` (
   `postal_code` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
