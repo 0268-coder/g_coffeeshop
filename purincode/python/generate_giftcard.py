@@ -232,7 +232,7 @@ with open(OUTPUT_SQL, "w", encoding="utf-8") as file:
         expiry = row['expiry_date']
         status = row['status']
         code = row['code']
-        purchaser_name = row['purchase_by_name']
+        purchaser_name = row['purchased_by_name']
         last_used = row['last_used_date']
         
         # Handle NULL values

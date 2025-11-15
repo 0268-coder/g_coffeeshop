@@ -20087,6 +20087,3 @@ INSERT INTO `handle` (`employee_id`, `menu_item_id`, `transaction_id`, `status`,
 -- Indexes for table `handle`
 --
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
