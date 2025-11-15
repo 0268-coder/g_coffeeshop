@@ -156,7 +156,7 @@ CREATE TABLE `gift_card` (
   `expiry_date` date DEFAULT NULL,
   `status` enum('Active','Used','Expired') NOT NULL DEFAULT 'Active',
   `code` varchar(20) NOT NULL,
-  `purchased_by_member_id` int(11) DEFAULT NULL,
+  `purchased_by_name` varchar(40) DEFAULT NULL,
   `last_used_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
