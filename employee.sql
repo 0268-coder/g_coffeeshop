@@ -5,7 +5,6 @@ CREATE TABLE `employee` (
   `hire_date` date NOT NULL,
   `salary` decimal(12,2) NOT NULL,
   --new data
-  PRIMARY KEY (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --data add(peppo)
