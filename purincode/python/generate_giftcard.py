@@ -180,7 +180,7 @@ for transaction in giftcard_source:
     title = random.choice(GIFTCARD_TITLES)
     
     # Purchase by name: 70% have a purchaser name, 30% NULL (anonymous gift)
-    purchase_by_name = random.choice(PURCHASER_NAMES) if random.random() < 0.7 else None
+    purchased_by_name = random.choice(PURCHASER_NAMES) if random.random() < 0.7 else None
     
     # Last used date (only if status is Used or if partially used)
     if status == "Used" or (status == "Active" and current_balance < initial_value):
@@ -201,7 +201,7 @@ for transaction in giftcard_source:
         'expiry_date': expiry_date,
         'status': status,
         'code': code,
-        'purchase_by_name': purchase_by_name,
+        'purchased_by_name': purchased_by_name,
         'last_used_date': last_used_date
     })
     giftcard_id += 1
@@ -210,7 +210,7 @@ for transaction in giftcard_source:
 # STEP 3: Save to CSV
 # ==============================================================
 with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=['payment_method_id', 'giftcard_id', 'initial_value', 'current_balance', 'title', 'issued_date', 'expiry_date', 'status', 'code', 'purchase_by_name', 'last_used_date'])
+    writer = csv.DictWriter(f, fieldnames=['payment_method_id', 'giftcard_id', 'initial_value', 'current_balance', 'title', 'issued_date', 'expiry_date', 'status', 'code', 'purchased_by_name', 'last_used_date'])
     writer.writeheader()
     writer.writerows(rows)
 
@@ -220,7 +220,7 @@ print(f"✓ Saved to '{OUTPUT_CSV}'")
 # STEP 4: Generate SQL INSERT statements
 # ==============================================================
 with open(OUTPUT_SQL, "w", encoding="utf-8") as file:
-    file.write("INSERT INTO `gift_card` (`payment_method_id`, `giftcard_id`, `initial_value`, `current_balance`, `title`, `issued_date`, `expiry_date`, `status`, `code`, `purchase_by_name`, `last_used_date`) VALUES\n")
+    file.write("INSERT INTO `gift_card` (`payment_method_id`, `giftcard_id`, `initial_value`, `current_balance`, `title`, `issued_date`, `expiry_date`, `status`, `code`, `purchased_by_name`, `last_used_date`) VALUES\n")
     
     for idx, row in enumerate(rows):
         pm_id = row['payment_method_id']
