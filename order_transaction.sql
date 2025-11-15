@@ -3,7 +3,7 @@ CREATE TABLE `order_transaction` (
   `order_quantity` int(11) NOT NULL,
   `order_unit_price` decimal(12,2) NOT NULL,
   `order_subtotal` decimal(12,2) NOT NULL,
-  `order_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `order_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `order_transaction` (`transaction_id`, `order_quantity`, `order_unit_price`, `order_subtotal`, `order_created_at`) VALUES

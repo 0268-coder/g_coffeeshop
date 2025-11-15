@@ -20129,23 +20129,6 @@ INSERT INTO `handle` (`employee_id`, `menu_item_id`, `transaction_id`, `status`,
 --
 -- Indexes for table `handle`
 --
-ALTER TABLE `handle`
-  ADD PRIMARY KEY (`employee_id`,`menu_item_id`,`transaction_id`),
-  ADD KEY `menu_item_id` (`menu_item_id`),
-  ADD KEY `transaction_id` (`transaction_id`);
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `handle`
---
-ALTER TABLE `handle`
-  ADD CONSTRAINT `fk_pp_pm1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `handle_ibfk_1` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_item` (`menu_item_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `handle_ibfk_2` FOREIGN KEY (`transaction_id`) REFERENCES `order_transaction` (`transaction_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

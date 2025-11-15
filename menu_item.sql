@@ -7,7 +7,6 @@ CREATE TABLE `menu_item` (
   `menu_available_from` date DEFAULT NULL,
   `menu_available_to` date DEFAULT NULL,
   --new primary key
-  PRIMARY KEY (`menu_item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `menu_item` (`menu_item_id`, `menu_item_name`, `menu_category`, `menu_price`, `menu_is_seasonal`, `menu_available_from`, `menu_available_to`) VALUES
