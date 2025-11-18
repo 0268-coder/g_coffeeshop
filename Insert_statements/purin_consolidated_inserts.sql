@@ -4097,7 +4097,7 @@ INSERT INTO `gift_card` (`payment_method_id`, `giftcard_id`, `initial_value`, `c
 (1, 4096, 500, 377.91, 'Weekend Special', '2025-04-08', '2028-01-27', 'Active', 'J9JF77YEJRA6HS0Z60P9', 'Xara', '2025-09-22'),
 (1, 4097, 1400, 0.0, 'Weekend Special', '2025-05-16', '2027-04-06', 'Used', 'WHXOPZN6G5AYTJ6CRP3Q', 'Phakorn', '2025-06-06');
 
- INTO `credit` (`payment_method_id`, `credit_id`, `last4digit`, `fname`, `lname`) VALUES
+INSERT INTO `credit` (`payment_method_id`, `credit_id`, `last4digit`, `fname`, `lname`) VALUES
 (2, 1, '7192', 'Kittipong', 'Phansiri'),
 (2, 2, '9550', 'Phurit', 'Phumpradit'),
 (2, 3, '4630', 'Niran', 'Yingsiri'),
@@ -4109,7 +4109,7 @@ INSERT INTO `gift_card` (`payment_method_id`, `giftcard_id`, `initial_value`, `c
 (2, 9, '1550', 'Chayaporn', 'Suwannarat'),
 (2, 10, '7867', 'Kanokwan', 'Kanjanakumnerd'),
 (2, 11, '5429', 'Warit', 'Worachot'),
-(2, 12, '2955', 'WeerayutINSERT', 'Suksan'),
+(2, 12, '2955', 'Weerayut', 'Suksan'),
 (2, 13, '3352', 'Ratchada', 'Phonphinit'),
 (2, 14, '9887', 'Tanapat', 'Thammarat'),
 (2, 15, '8386', 'Tawan', 'Charoensuk'),
