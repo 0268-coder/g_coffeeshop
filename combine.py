@@ -8,9 +8,26 @@ SQL_FILES_DIRECTORY = os.path.join(SCRIPT_DIR, 'insert_statements')
 OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'output')
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, 'combined_inserts.sql')
 
+# Whitelist of files to include in combined_inserts.sql (in desired order)
+# This prevents duplicate data and ensures proper structure
+APPROVED_FILES = [
+    'delivery_addresses.sql',
+    'delivery_data.sql',
+    'employee.sql',
+    'handle.sql',
+    'inventory.sql',
+    'inventory_transaction.sql',
+    'menu_item.sql',
+    'purin_consolidated_inserts.sql',
+    'reduction.sql',
+    'restock.sql',
+    'supplier.sql',
+]
+
 def combine_sql_files(directory=SQL_FILES_DIRECTORY, output_file=None):
     """
-    Combines all .sql files in a specified directory into a single file.
+    Combines approved .sql files in a specified directory into a single file.
+    Uses a whitelist to ensure correct file order and prevent duplicates.
     
     Args:
         directory (str): The directory containing SQL files to merge (default: SQL_FILES_DIRECTORY)
@@ -25,13 +42,25 @@ def combine_sql_files(directory=SQL_FILES_DIRECTORY, output_file=None):
         print(f"Error: Directory '{directory}' does not exist.")
         return False
     
-    # Get all .sql files in the specified directory (sorted alphabetically)
-    pattern = os.path.join(directory, '*.sql')
-    sql_files = sorted(glob.glob(pattern))
+    # Get approved SQL files in specified order
+    sql_files = []
+    missing_files = []
+    
+    for filename in APPROVED_FILES:
+        filepath = os.path.join(directory, filename)
+        if os.path.exists(filepath):
+            sql_files.append(filepath)
+        else:
+            missing_files.append(filename)
     
     if not sql_files:
-        print(f"No .sql files found in '{directory}'.")
+        print(f"No approved SQL files found in '{directory}'.")
         return False
+    
+    if missing_files:
+        print(f"Warning: The following approved files were not found:")
+        for f in missing_files:
+            print(f"  - {f}")
     
     print(f"Found {len(sql_files)} SQL files in '{directory}':")
     for file in sql_files:

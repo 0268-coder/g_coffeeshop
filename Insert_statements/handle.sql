@@ -26,19 +26,6 @@ START TRANSACTION;
 -- Table structure for table `handle`
 --
 
-CREATE TABLE `handle` (
-  `employee_id` int(11) NOT NULL,
-  `menu_item_id` int(11) NOT NULL,
-  `transaction_id` char(36) NOT NULL,
-  `status` varchar(30) DEFAULT NULL,
-  `handled_at` timestamp NULL DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `quantity_handled` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `handle`
---
 
 INSERT INTO `handle` (`employee_id`, `menu_item_id`, `transaction_id`, `status`, `handled_at`, `notes`, `quantity_handled`) VALUES
 (1, 1, '002e7fc3-0b4f-43b5-9104-1c8506c66fec', 'Completed', '2025-06-01 16:35:47', 'Note: More sugar.', 1),

@@ -10057,16 +10057,3 @@ INSERT INTO delivery_transaction (delivery_id, delivery_time, transaction_id) VA
 (10016, '2025-06-01 01:44:16', '766443ff-a329-4bb9-959a-95cc4368a841'),
 (10017, '2025-06-01 06:18:06', '620d7973-7915-4ed1-b45a-5acfe252dd03'),
 (10018, '2025-06-01 07:48:14', 'f25032b4-1567-44a1-a944-9c16962ac8dd');
-
--- DELIVERY ADDRESS
-INSERT INTO delivery_address (delivery_address_id, delivery_id, street, sub_district, district, province, postal_code) VALUES
-(1, 1, '99 Sukhumvit 22', 'Khlong Toei', 'Khlong Toei', 'Bangkok', '10110'),
-(2, 2, '128/4 Rama 4 Road', 'Lumphini', 'Pathum Wan', 'Bangkok', '10330'),
-(3, 3, '55/8 Ari 1', 'Samsen Nai', 'Phaya Thai', 'Bangkok', '10400'),
-(4, 4, '22/17 Ratchada 7', 'Din Daeng', 'Din Daeng', 'Bangkok', '10400'),
-(5, 5, '188/12 Ladprao 26', 'Chom Phon', 'Chatuchak', 'Bangkok', '10900'),
-(6, 6, '77/9 Srinakarin', 'Nong Bon', 'Prawet', 'Bangkok', '10250'),
-(7, 7, '44/3 Pradit Manutham', 'Lat Phrao', 'Lat Phrao', 'Bangkok', '10230'),
-(8, 8, '201/2 Bangna-Trad', 'Bang Na Nuea', 'Bang Na', 'Bangkok', '10260'),
-(9, 9, '500/12 Latya Road', 'Khlong San', 'Khlong San', 'Bangkok', '10600'),
-(10, 10, '12/45 Phetkasem 48', 'Bang Duan', 'Phasi Charoen', 'Bangkok', '10160');
