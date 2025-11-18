@@ -40831,4 +40831,5 @@ ALTER TABLE `restock`
 COMMIT;
 
 ALTER TABLE `payment_transaction`
-  ADD PRIMARY KEY `transaction_id`;
+  ADD PRIMARY KEY (`transaction_id`);
+
